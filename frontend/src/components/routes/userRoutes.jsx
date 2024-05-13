@@ -112,7 +112,7 @@ const userRoutes = () => {
       />
 
       <Route
-        path="/invoice/orders/:id"
+        path="/invoice/order/:id"
         element={
           <ProtectedRoute>
             <Invoice />
