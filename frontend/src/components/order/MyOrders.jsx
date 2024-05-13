@@ -72,7 +72,7 @@ const MyOrders = () => {
               <i className="fa fa-eye"></i>
             </Link>
             <Link
-              to={`/invoice/orders/${order?._id}`}
+              to={`/invoice/order/${order?._id}`}
               className="btn btn-success ms-2"
             >
               <i className="fa fa-print"></i>
