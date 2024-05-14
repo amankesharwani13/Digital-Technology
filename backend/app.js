@@ -17,7 +17,9 @@ process.on("uncaughtException",(err) => {
     console.log("Shutting down due to uncaught exception");
     process.exit(1);
 })
-dotenv.config({path:"backend/config/config.env"});
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  dotenv.config({ path: "backend/config/config.env" });
+}
 
 // Connecting to database
 connectDatabase();
