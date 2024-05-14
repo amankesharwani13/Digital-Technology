@@ -1,39 +1,41 @@
-import express from 'express';
+import express from "express";
 const app = express();
-import dotenv from 'dotenv';
-import cookieParser from 'cookie-parser';
-import { connectDatabase } from './config/dbConnect.js';
+import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import { connectDatabase } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/errors.js";
-
 import path from "path";
-// import { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
+// import path from "path";
+// // import { fileURLToPath } from "url";
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
 // Handle Uncaught exceptions  like:console.log(hello);
-process.on("uncaughtException",(err) => {
-    console.log(`ERROR:${err}`);
-    console.log("Shutting down due to uncaught exception");
-    process.exit(1);
-})
-if (process.env.NODE_ENV !== "PRODUCTION") {
-  dotenv.config({ path: "backend/config/config.env" });
-}
+process.on("uncaughtException", (err) => {
+  console.log(`ERROR:${err}`);
+  console.log("Shutting down due to uncaught exception");
+  process.exit(1);
+});
+
+
+// if (process.env.NODE_ENV !== "PRODUCTION") {
+//   dotenv.config({ path: "backend/config/config.env" });
+// }
 
 // Connecting to database
 connectDatabase();
 
 app.use(
-    express.json({
-      limit: "10mb",
-      verify: (req, res, buf) => {
-        req.rawBody = buf.toString();
-      },
-    })
-  );  
-    // express.json is middleware function to parse incoming JSON data from HTTP requests
-app.use(cookieParser()); 
+  express.json({
+    limit: "10mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
+// express.json is middleware function to parse incoming JSON data from HTTP requests
+app.use(cookieParser());
 
 // console.log(hello);
 
@@ -44,33 +46,49 @@ import orderRoutes from "./routes/order.js";
 import paymentRoutes from "./routes/payment.js";
 import { fileURLToPath } from "url";
 
-
-app.use("/api/v1",productRoutes);
-app.use("/api/v1",authRoutes);
-app.use("/api/v1",orderRoutes);
+app.use("/api/v1", productRoutes);
+app.use("/api/v1", authRoutes);
+app.use("/api/v1", orderRoutes);
 app.use("/api/v1", paymentRoutes);
 
+// if (process.env.NODE_ENV === "PRODUCTION") {
+//   app.use(express.static(path.join(__dirname, "../frontend/build")));
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+//   });
+// }
+
+
+
+const __dirname1 = path.resolve();
 
 if (process.env.NODE_ENV === "PRODUCTION") {
-  app.use(express.static(path.join(__dirname, "../frontend/build")));
+  app.use(express.static(path.join(__dirname1, "/frontend/build")));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
+  );
+} else {
+  app.get("/", (req, res) => {
+    res.send("API is running..");
   });
 }
 
 app.use(errorMiddleware);
 
-const server = app.listen(process.env.PORT,()=>{
-    console.log(`Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode`);
+const server = app.listen(process.env.PORT, () => {
+  console.log(
+    `Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode`
+  );
 });
 
 // Handle Unhandled Promise rejections
 // changes from mongodb://127.0.0.1:27017/shopnow to mongod://127.0.0.1:27017/shopnow
-process.on("unhandledRejection",(err) => {
-    console.log(`Error: ${err}`);
-    console.log("Shutting down server due to Unhandled Promise Rejection");
-    server.close(() =>{
-        process.exit(1);
-    });
+process.on("unhandledRejection", (err) => {
+  console.log(`Error: ${err}`);
+  console.log("Shutting down server due to Unhandled Promise Rejection");
+  server.close(() => {
+    process.exit(1);
+  });
 });
