@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDatabase } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/errors.js";
+import cors from "cors";
 
 // Handle Uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -25,6 +26,15 @@ app.use(
     },
   })
 );
+
+app.use(cors(
+  {
+    origin:["https://deploy-mern-1whq.vercel.app"],
+    methods:["POST","GET"],
+    credentials:true
+  }
+));
+
 app.use(cookieParser());
 
 // Import all routes
