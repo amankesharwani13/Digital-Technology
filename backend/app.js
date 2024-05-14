@@ -4,24 +4,22 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDatabase } from "./config/dbConnect.js";
 import errorMiddleware from "./middlewares/errors.js";
+
 import path from "path";
+// import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// import path from "path";
-// // import { fileURLToPath } from "url";
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// Handle Uncaught exceptions  like:console.log(hello);
+// Handle Uncaught exceptions
 process.on("uncaughtException", (err) => {
-  console.log(`ERROR:${err}`);
-  console.log("Shutting down due to uncaught exception");
+  console.log(`ERROR: ${err}`);
+  console.log("Shutting down due to uncaught expection");
   process.exit(1);
 });
 
-
-// if (process.env.NODE_ENV !== "PRODUCTION") {
-//   dotenv.config({ path: "backend/config/config.env" });
-// }
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  dotenv.config({ path: "backend/config/config.env" });
+}
 
 // Connecting to database
 connectDatabase();
@@ -34,10 +32,7 @@ app.use(
     },
   })
 );
-// express.json is middleware function to parse incoming JSON data from HTTP requests
 app.use(cookieParser());
-
-// console.log(hello);
 
 // Import all routes
 import productRoutes from "./routes/products.js";
@@ -51,42 +46,26 @@ app.use("/api/v1", authRoutes);
 app.use("/api/v1", orderRoutes);
 app.use("/api/v1", paymentRoutes);
 
-// if (process.env.NODE_ENV === "PRODUCTION") {
-//   app.use(express.static(path.join(__dirname, "../frontend/build")));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
-//   });
-// }
-
-
-
-const __dirname1 = path.resolve();
-
 if (process.env.NODE_ENV === "PRODUCTION") {
-  app.use(express.static(path.join(__dirname1, "/frontend/build")));
+  app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
-  );
-} else {
-  app.get("/", (req, res) => {
-    res.send("API is running..");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
   });
 }
 
+// Using error middleware
 app.use(errorMiddleware);
 
 const server = app.listen(process.env.PORT, () => {
   console.log(
-    `Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode`
+    `Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode.`
   );
 });
 
-// Handle Unhandled Promise rejections
-// changes from mongodb://127.0.0.1:27017/shopnow to mongod://127.0.0.1:27017/shopnow
+//Handle Unhandled Promise rejections
 process.on("unhandledRejection", (err) => {
-  console.log(`Error: ${err}`);
+  console.log(`ERROR: ${err}`);
   console.log("Shutting down server due to Unhandled Promise Rejection");
   server.close(() => {
     process.exit(1);
