@@ -5,7 +5,7 @@ import Product from "../models/product.js";
 // mongoose.set('strictQuery', true); 
 const seedProducts = async()=>{
     try{
-        await mongoose.connect("mongodb://localhost:27017/shopnow")
+        await mongoose.connect("mongodb+srv://amankesharwani1234:amankesharwani4321@cluster2.rzwbldc.mongodb.net/Cluster2?retryWrites=true&w=majority&appName=Cluster2")
 
         await Product.deleteMany();
         console.log("Products are deleted");
