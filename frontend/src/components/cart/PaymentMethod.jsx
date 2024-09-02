@@ -106,7 +106,7 @@ const PaymentMethod = () => {
                 Cash on Delivery
               </label>
             </div>
-            <div className="form-check">
+{/*             <div className="form-check">
               <input
                 className="form-check-input"
                 type="radio"
@@ -118,7 +118,42 @@ const PaymentMethod = () => {
               <label className="form-check-label" htmlFor="cardradio">
                 Card - VISA, MasterCard
               </label>
+            </div> */}
+
+            <div>
+            <label className="form-check-label" htmlFor="codradio">
+                Other Payment Option
+              </label>
             </div>
+            {/* <div className="form-check"> */}
+              {/* <input
+                className="form-check-input"
+                type="radio"
+                name="payment_mode"
+                id="cardradio"
+                value="Card"
+                onChange={(e) => setMethod("Card")}
+              /> */}
+              {/* <label className="form-check-label" htmlFor="cardradio"> */}
+                {/* Card - VISA, MasterCard */}
+                <div>
+              <img
+                src="/images/Gpaypicsa.png"
+                alt="Shop QR Code"
+                style={{ width: '150px', height: '150px' }}
+              />
+              </div>
+              
+                <p>Scan the QR code above to pay using UPI</p>
+                <div>
+                 <p>Pay On Phone Number: <bold>7992149158</bold></p>
+              </div>
+              <div>
+                 <p>Pay On UPI Id: <bold>7992149158.paytm</bold></p>
+              </div>
+                {/* <img src="/images/Gpaypicsa.png" alt="description"  /> */}
+              {/* </label> */}
+            {/* </div> */}
 
             <button
               id="shipping_btn"
