@@ -25,7 +25,7 @@ export const newOrder = catchAsyncErrors(async (req, res, next) => {
     totalAmount,
     paymentMethod,
     paymentInfo,
-    user: req.user._id,
+    user: req.user._id,      // req.user._id ka matlab hai ki order jis user ne place kiya hai uske account se link
   });
 
   res.status(200).json({
